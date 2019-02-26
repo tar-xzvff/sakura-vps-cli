@@ -1,6 +1,6 @@
 package api
 
-import "sakura-vps-cli/model/object"
+import "../object"
 
 type ResponsePublicScripts struct {
 	PublicScripts []object.PublicScript `json:"public_scripts"`

@@ -3,8 +3,8 @@ package lib
 import (
 	"encoding/json"
 	"gopkg.in/resty.v1"
-	"sakura-vps-cli/model/api"
-	"sakura-vps-cli/model/object"
+	"../model/api"
+	"../model/object"
 	"strconv"
 )
 
