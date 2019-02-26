@@ -1,6 +1,6 @@
 package api
 
-import "sakura-vps-cli/model/object"
+import "../object"
 
 type ResponseSwitches struct {
 	Switches []object.Switch `json:"switches"`
