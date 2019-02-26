@@ -13,10 +13,9 @@ type API struct {
 	Token  string
 }
 
-func NewAPI(url string, token string) *API {
+func NewAPI() *API {
 	a := new(API)
-	a.ApiUrl = url
-	a.Token = token
+	a.ApiUrl = "https://secure.sakura.ad.jp/vps/api/v6.5/"
 	return a
 }
 
@@ -148,4 +147,20 @@ func (t *API) GetMonitoring(monitoringId int) object.Monitoring {
 	} else {
 		return Response.Monitoring
 	}
+}
+
+func (t *API) LogIn(memberId string, password string) bool {
+	if LogIn(memberId, password) {
+		t.Token = LoadToken()
+		return true
+	}
+	return false
+}
+
+func (t *API) LogOut() bool {
+	if LogOut() {
+		t.Token = ""
+		return true
+	}
+	return false
 }
