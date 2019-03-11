@@ -21,7 +21,7 @@ func NewAPI() *API {
 
 func (t *API)GetServers() []object.Server {
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=" + t.Token).
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(t.ApiUrl + "servers")
 	var Response api.ResponseServers
 	er := json.Unmarshal(resp.Body(), &Response)
