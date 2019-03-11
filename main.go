@@ -1,19 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"github.com/olekukonko/tablewriter"
 	"github.com/urfave/cli"
 	"log"
 	"os"
-	"sakura-vps-cli/lib"
+	"./lib"
 	"strconv"
 )
 
 func main() {
 	app := cli.NewApp()
 	app.Name = "sv"
-	app.Usage = "fight the loneliness!"
+	app.Usage = "CLI client for SakuraVps"
 	app.Commands = []cli.Command{
 		{
 			Name:	"auth",
@@ -33,22 +32,26 @@ func main() {
 						},
 					},
 					Action: func(c *cli.Context) error {
+						/*
 						if lib.LogIn(c.String("id"), c.String("password")) {
 							fmt.Println(lib.Message("SUCCESS_LOGIN"))
 						} else {
 							fmt.Println(lib.Message("FAILED_LOGIN"))
 						}
+						*/
 						return nil
 					},
 				},{
 					Name:	"logout",
 					Usage:	"Logout SAKURA VPS",
 					Action: func(c *cli.Context) error {
+						/*
 						if lib.LogOut() {
 							fmt.Println(lib.Message("SUCCESS_LOGOUT"))
 						} else {
 							fmt.Println(lib.Message("FAILED_LOGOUT"))
 						}
+						*/
 						return nil
 					},
 				},
@@ -72,11 +75,11 @@ func main() {
 								server.Ipv4[0].Hostname,
 								server.Ipv4[0].Address,
 								server.Ipv6[0].Address,
-								server.GetZoneName(),
+								//server.GetZoneName(),
 								strconv.Itoa(server.CPUCores),
-								server.GetMemorySize(),
-								server.GetDiskSize(),
-								server.GetStorageType(),
+								//server.GetMemorySize(),
+								//server.GetDiskSize(),
+								//server.GetStorageType(),
 								server.HostType,
 								server.Power,
 							})
