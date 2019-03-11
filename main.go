@@ -91,6 +91,86 @@ func main() {
 						table.Render() // Send output
 						return nil
 					},
+				},{
+					Name:  "boot",
+					Usage: "Turn on the server.",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "id",
+							Usage: "Your ServerID",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						serverId := c.Int("id")
+						client := lib.NewAPI()
+						var server = client.GetServer(serverId)
+						if server.PowerOn() == true {
+							fmt.Println(lib.Message("SUCCESS_POWER_ON"))
+						} else {
+							fmt.Println(lib.Message("FAILED_POWER_CONTROL"))
+						}
+						return nil
+					},
+				},{
+					Name:  "shutdown",
+					Usage: "Turn off the server.",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "id",
+							Usage: "Your ServerID",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						serverId := c.Int("id")
+						client := lib.NewAPI()
+						var server = client.GetServer(serverId)
+						if server.Shutdown() == true {
+							fmt.Println(lib.Message("SUCCESS_POWER_SHUTDOWN"))
+						} else {
+							fmt.Println(lib.Message("FAILED_POWER_CONTROL"))
+						}
+						return nil
+					},
+				},{
+					Name:  "shutdown-force",
+					Usage: "Forcibly turn off the server.",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "id",
+							Usage: "Your ServerID",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						serverId := c.Int("id")
+						client := lib.NewAPI()
+						var server = client.GetServer(serverId)
+						if server.PowerOff() == true {
+							fmt.Println(lib.Message("SUCCESS_POWER_OFF"))
+						} else {
+							fmt.Println(lib.Message("FAILED_POWER_CONTROL"))
+						}
+						return nil
+					},
+				},{
+					Name:  "reset",
+					Usage: "Reset the server power.",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "id",
+							Usage: "Your ServerID",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						serverId := c.Int("id")
+						client := lib.NewAPI()
+						var server = client.GetServer(serverId)
+						if server.Reset() == true {
+							fmt.Println(lib.Message("SUCCESS_POWER_RESET"))
+						} else {
+							fmt.Println(lib.Message("FAILED_POWER_CONTROL"))
+						}
+						return nil
+					},
 				},
 			},
 		},

@@ -118,7 +118,7 @@ func (t *Server) PowerOff() bool {
 		"Host": "secure.sakura.ad.jp",
 		"Origin": "https://secure.sakura.ad.jp",
 		"Content-Type": "application/json",
-		"Cookie": "SIDv2=",
+		"Cookie": "SIDv2=" + LoadToken(),
 	}).Post(url)
 
 	if resp.StatusCode() == 202 {

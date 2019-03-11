@@ -34,7 +34,7 @@ func (t *API)GetServers() []object.Server {
 
 func (t *API)GetServer(serverId int) object.Server {
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=" + t.Token).
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(t.ApiUrl + "servers/" + strconv.Itoa(serverId))
 	var Response api.ResponseServer
 	er := json.Unmarshal(resp.Body(), &Response)
@@ -47,7 +47,7 @@ func (t *API)GetServer(serverId int) object.Server {
 
 func (t *API)GetSwitches() []object.Switch {
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=" + t.Token).
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(t.ApiUrl + "switches")
 	var Response api.ResponseSwitches
 	er := json.Unmarshal(resp.Body(), &Response)
@@ -60,7 +60,7 @@ func (t *API)GetSwitches() []object.Switch {
 
 func (t *API)GetSwitch(switchId int) object.Switch {
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=" + t.Token).
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(t.ApiUrl + "switches/" + strconv.Itoa(switchId))
 	var Response api.ResponseSwitch
 	er := json.Unmarshal(resp.Body(), &Response)
@@ -73,7 +73,7 @@ func (t *API)GetSwitch(switchId int) object.Switch {
 
 func (t *API)GetPublicScripts() []object.PublicScript {
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=" + t.Token).
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(t.ApiUrl + "startupscripts/public")
 	var Response api.ResponsePublicScripts
 	er := json.Unmarshal(resp.Body(), &Response)
@@ -86,7 +86,7 @@ func (t *API)GetPublicScripts() []object.PublicScript {
 
 func (t *API)GetPublicScript(scriptId string) object.PublicScript {
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=" + t.Token).
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(t.ApiUrl + "startupscripts/public/" + scriptId)
 	var Response api.ResponsePublicScript
 	er := json.Unmarshal(resp.Body(), &Response)
@@ -99,7 +99,7 @@ func (t *API)GetPublicScript(scriptId string) object.PublicScript {
 
 func (t *API) GetCustomScripts() []object.CustomScript {
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=" + t.Token).
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(t.ApiUrl + "startupscripts/custom")
 	var Response api.ResponseCustomScripts
 	er := json.Unmarshal(resp.Body(), &Response)
@@ -112,7 +112,7 @@ func (t *API) GetCustomScripts() []object.CustomScript {
 
 func (t *API) GetCustomScript(scriptId string) object.CustomScript {
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=" + t.Token).
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(t.ApiUrl + "startupscripts/custom/" + scriptId)
 	var Response api.ResponseCustomScript
 	er := json.Unmarshal(resp.Body(), &Response)
@@ -125,7 +125,7 @@ func (t *API) GetCustomScript(scriptId string) object.CustomScript {
 
 func (t *API) GetMonitorings() []object.Monitoring {
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=" + t.Token).
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(t.ApiUrl + "monitorings")
 	var Response api.ResponseMonitorings
 	er := json.Unmarshal(resp.Body(), &Response)
@@ -138,7 +138,7 @@ func (t *API) GetMonitorings() []object.Monitoring {
 
 func (t *API) GetMonitoring(monitoringId int) object.Monitoring {
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=" + t.Token).
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(t.ApiUrl + "monitorings/" + strconv.Itoa(monitoringId))
 	var Response api.ResponseMonitoring
 	er := json.Unmarshal(resp.Body(), &Response)
