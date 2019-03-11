@@ -7,6 +7,7 @@ import (
 	"os"
 	"./lib"
 	"strconv"
+	"fmt"
 )
 
 func main() {
@@ -32,26 +33,22 @@ func main() {
 						},
 					},
 					Action: func(c *cli.Context) error {
-						/*
 						if lib.LogIn(c.String("id"), c.String("password")) {
 							fmt.Println(lib.Message("SUCCESS_LOGIN"))
 						} else {
 							fmt.Println(lib.Message("FAILED_LOGIN"))
 						}
-						*/
 						return nil
 					},
 				},{
 					Name:	"logout",
 					Usage:	"Logout SAKURA VPS",
 					Action: func(c *cli.Context) error {
-						/*
 						if lib.LogOut() {
 							fmt.Println(lib.Message("SUCCESS_LOGOUT"))
 						} else {
 							fmt.Println(lib.Message("FAILED_LOGOUT"))
 						}
-						*/
 						return nil
 					},
 				},
@@ -65,7 +62,7 @@ func main() {
 					Name:  "ls",
 					Usage: "Display of server list",
 					Action: func(c *cli.Context) error {
-						client := lib.NewAPI("https://secure.sakura.ad.jp/vps/api/v6.5/", "e0b0880e-9859-49ee-a07c-3cd2c8d0e6d7")
+						client := lib.NewAPI()
 						var servers = client.GetServers()
 						var data [][]string
 						for _, server := range servers {
@@ -75,11 +72,11 @@ func main() {
 								server.Ipv4[0].Hostname,
 								server.Ipv4[0].Address,
 								server.Ipv6[0].Address,
-								//server.GetZoneName(),
+								strconv.Itoa(server.Zone),
 								strconv.Itoa(server.CPUCores),
-								//server.GetMemorySize(),
-								//server.GetDiskSize(),
-								//server.GetStorageType(),
+								strconv.Itoa(server.MemoryBytes),
+								strconv.Itoa(server.Storage[0].SizeBytes),
+								strconv.Itoa(server.Storage[0].Type),
 								server.HostType,
 								server.Power,
 							})
@@ -103,8 +100,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//token := lib.GetToken()
-	//fmt.Println(token)
-	//client := lib.NewAPI("https://secure.sakura.ad.jp/vps/api/v6.5/", "e0b0880e-9859-49ee-a07c-3cd2c8d0e6d7")
-	//fmt.Println(client.GetMonitoring(client.GetMonitorings()[0].ID))
 }
