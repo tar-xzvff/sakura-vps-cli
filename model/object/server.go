@@ -1,9 +1,12 @@
 package object
 
 import (
-	"fmt"
-	"gopkg.in/resty.v1"
+	"log"
+	"io/ioutil"
 	"strconv"
+	"gopkg.in/resty.v1"
+	"encoding/json"
+	"os/user"
 )
 
 type Server struct {
@@ -46,33 +49,63 @@ type Server struct {
 	DNSRecords int    `json:"dns_records"`
 }
 
-func (t *Server) getPower() string {
+type Power struct {
+	ID     int    `json:"id"`
+	Server int    `json:"server"`
+	Status string `json:"status"`
+}
+
+type ResponsePowers struct {
+	Power Power	`json:"powers"`
+}
+
+func LoadToken() string {
+	usr, err := user.Current()
+	if err != nil {
+		log.Fatal( err )
+	}
+
+	dat, err := ioutil.ReadFile(usr.HomeDir + "/.sakura_vps_token")
+	if err != nil {
+		log.Fatal( err )
+	}
+
+	return string(dat)
+}
+
+func (t *Server) GetPower() string {
 	var url = "https://secure.sakura.ad.jp/vps/api/v6.5/powers/" + strconv.Itoa(t.ID)
 	resp, _ := resty.R().
-		SetHeader("Cookie", "SIDv2=e0b0880e-9859-49ee-a07c-3cd2c8d0e6d7").
+		SetHeader("Cookie", "SIDv2=" + LoadToken()).
 		Get(url)
-	fmt.Println(url)
-	fmt.Println(resp)
-	return "on"
+
+	var Response ResponsePowers
+	er := json.Unmarshal(resp.Body(), &Response)
+	if er != nil {
+		panic(er)
+	} else {
+		if resp.StatusCode() == 200 {
+			return Response.Power.Status
+		}
+		return ""
+	}
 }
 
 func (t *Server) PowerOn() bool {
 	var url = "https://secure.sakura.ad.jp/vps/api/v6.5/powers/" + strconv.Itoa(t.ID) + "/start"
 	resp, _ := resty.R().
 		SetHeaders(map[string]string{
-			"X-Requested-With": "XMLHttpRequest",
-			"Host": "secure.sakura.ad.jp",
-			"Origin": "https://secure.sakura.ad.jp",
-			"Content-Type": "application/json",
-			"Cookie": "SIDv2=e0b0880e-9859-49ee-a07c-3cd2c8d0e6d7",
-		}).
-		Post(url)
-	fmt.Println(url)
+		"X-Requested-With": "XMLHttpRequest",
+		"Host": "secure.sakura.ad.jp",
+		"Origin": "https://secure.sakura.ad.jp",
+		"Content-Type": "application/json",
+		"Cookie": "SIDv2=" + LoadToken(),
+	}).Post(url)
+
 	if resp.StatusCode() == 202 {
-		t.getPower()
+		t.GetPower()
 		return true
 	} else {
-		fmt.Println(resp.RawResponse)
 		return false
 	}
 }
@@ -81,19 +114,17 @@ func (t *Server) PowerOff() bool {
 	var url = "https://secure.sakura.ad.jp/vps/api/v6.5/powers/" + strconv.Itoa(t.ID) + "/destroy"
 	resp, _ := resty.R().
 		SetHeaders(map[string]string{
-			"X-Requested-With": "XMLHttpRequest",
-			"Host": "secure.sakura.ad.jp",
-			"Origin": "https://secure.sakura.ad.jp",
-			"Content-Type": "application/json",
-			"Cookie": "SIDv2=e0b0880e-9859-49ee-a07c-3cd2c8d0e6d7",
-		}).
-		Post(url)
-	fmt.Println(url)
+		"X-Requested-With": "XMLHttpRequest",
+		"Host": "secure.sakura.ad.jp",
+		"Origin": "https://secure.sakura.ad.jp",
+		"Content-Type": "application/json",
+		"Cookie": "SIDv2=",
+	}).Post(url)
+
 	if resp.StatusCode() == 202 {
-		t.getPower()
+		t.GetPower()
 		return true
 	} else {
-		fmt.Println(resp.RawResponse)
 		return false
 	}
 }
@@ -102,19 +133,17 @@ func (t *Server) Shutdown() bool {
 	var url = "https://secure.sakura.ad.jp/vps/api/v6.5/powers/" + strconv.Itoa(t.ID) + "/shutdown"
 	resp, _ := resty.R().
 		SetHeaders(map[string]string{
-			"X-Requested-With": "XMLHttpRequest",
-			"Host": "secure.sakura.ad.jp",
-			"Origin": "https://secure.sakura.ad.jp",
-			"Content-Type": "application/json",
-			"Cookie": "SIDv2=e0b0880e-9859-49ee-a07c-3cd2c8d0e6d7",
-		}).
-		Post(url)
-	fmt.Println(url)
+		"X-Requested-With": "XMLHttpRequest",
+		"Host": "secure.sakura.ad.jp",
+		"Origin": "https://secure.sakura.ad.jp",
+		"Content-Type": "application/json",
+		"Cookie": "SIDv2=" + LoadToken(),
+	}).Post(url)
+
 	if resp.StatusCode() == 202 {
-		t.getPower()
+		t.GetPower()
 		return true
 	} else {
-		fmt.Println(resp.RawResponse)
 		return false
 	}
 }
@@ -123,19 +152,17 @@ func (t *Server) Reset() bool {
 	var url = "https://secure.sakura.ad.jp/vps/api/v6.5/powers/" + strconv.Itoa(t.ID) + "/reset"
 	resp, _ := resty.R().
 		SetHeaders(map[string]string{
-			"X-Requested-With": "XMLHttpRequest",
-			"Host": "secure.sakura.ad.jp",
-			"Origin": "https://secure.sakura.ad.jp",
-			"Content-Type": "application/json",
-			"Cookie": "SIDv2=e0b0880e-9859-49ee-a07c-3cd2c8d0e6d7",
-		}).
-		Post(url)
-	fmt.Println(url)
+		"X-Requested-With": "XMLHttpRequest",
+		"Host": "secure.sakura.ad.jp",
+		"Origin": "https://secure.sakura.ad.jp",
+		"Content-Type": "application/json",
+		"Cookie": "SIDv2=" + LoadToken(),
+	}).Post(url)
+
 	if resp.StatusCode() == 202 {
-		t.getPower()
+		t.GetPower()
 		return true
 	} else {
-		fmt.Println(resp.RawResponse)
 		return false
 	}
 }
